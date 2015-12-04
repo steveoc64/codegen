@@ -24,6 +24,8 @@ $ codegen [-out dirname] -t tablename [-html]
 -as 				(Optional) Name of the Table in the generated code (default = same as tablename)
 
 -html  				(Optional) Generate HTML
+
+-formly 			(Optional) Generate Formly Form definitions 
 ```
 
 
@@ -37,3 +39,10 @@ The following super basic HTML files will be generated into the output directror
 - &lt;tablename&gt;.edit.html .....	Edit form for the SQL table
 - &lt;tablename&gt;.new.html ......	New record form for the SQL table
 
+## Formly Definitions
+
+Run codegen with the -formly flag to generate a basic Formly layout in Javascript
+
+The following super basic JS files will be generated into the output directory :
+
+- &lt;tablename&gt;.form.js .....	Define field input types, and create a function that creates a form

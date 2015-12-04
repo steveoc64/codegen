@@ -90,6 +90,10 @@ func generateHTML() {
 	generateHTML_new(fmt.Sprintf("%s/%s.new.html", dirname, tablename))
 }
 
+func generateForm() {
+	generate_Formly(fmt.Sprintf("%s/%s.form.js", dirname, tablename))
+}
+
 func UpperFirst(s string) string {
 	byt := []byte(s)
 	firstChar := bytes.ToUpper([]byte{byt[0]})
@@ -105,6 +109,7 @@ func main() {
 	flag.StringVar(&sqltable, "t", "", "Name of the SQL table to use")
 	flag.StringVar(&sqlas, "as", "", "(Optional) name of the table Object   (default = same as SQL table name)")
 	flag.BoolVar(&html, "html", false, "Generate HTML ?")
+	flag.BoolVar(&form, "formly", false, "Generate ngFormly Defintiions ?")
 	flag.Parse()
 
 	if dirname == "" {
@@ -128,6 +133,10 @@ func main() {
 
 	if html {
 		generateHTML()
+	}
+
+	if form {
+		generateForm()
 	}
 
 }
