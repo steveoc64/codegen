@@ -6,6 +6,7 @@
 # Folders
 _obj
 _test
+generated
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -73,3 +74,4 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.html
