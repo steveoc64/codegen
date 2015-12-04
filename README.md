@@ -26,6 +26,11 @@ $ codegen [-out dirname] -t tablename [-html]
 -html  				(Optional) Generate HTML
 
 -formly 			(Optional) Generate Formly Form definitions 
+
+-gotype				(Optional) Generate Go typedef for this table
+
+-gorest				(Optional) Generate Go REST endpoints for this table
+
 ```
 
 
@@ -46,3 +51,8 @@ Run codegen with the -formly flag to generate a basic Formly layout in Javascrip
 The following super basic JS files will be generated into the output directory :
 
 - &lt;tablename&gt;.form.js .....	Define field input types, and create a function that creates a form
+
+## Go Code Generation
+
+Run codegen with -gotype to generate a Go typedef to stdout
+

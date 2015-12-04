@@ -20,18 +20,18 @@ type DBSchema struct {
 }
 
 var (
-	DB         *runner.DB
-	dirname    string
-	dbname     string
-	sqltable   string
-	sqlas      string
-	tablename  string
-	Tablename  string
-	html       bool
-	form       bool
-	controller bool
-	backend    bool
-	schema     []*DBSchema
+	DB        *runner.DB
+	dirname   string
+	dbname    string
+	sqltable  string
+	sqlas     string
+	tablename string
+	Tablename string
+	html      bool
+	form      bool
+	gotype    bool
+	gorest    bool
+	schema    []*DBSchema
 )
 
 type Today struct {
@@ -94,6 +94,35 @@ func generateForm() {
 	generate_Formly(fmt.Sprintf("%s/%s.form.js", dirname, tablename))
 }
 
+func generateGoType() {
+
+	fmt.Printf(`
+typedef DB%s struct {
+`, Tablename)
+
+	for _, field := range schema {
+		switch field.DataType {
+		case "integer":
+			fmt.Printf("	%s  int  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		case "character varying":
+			fmt.Printf("	%s  string  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		case "text":
+			fmt.Printf("	%s  string  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		case "boolean":
+			fmt.Printf("	%s  bool  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		case "timestamp without time zone":
+			fmt.Printf("	%s  dat.NullDate  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		case "numeric":
+			fmt.Printf("	%s  float64  `db:\"%s\"`\n", field.UpColumn, field.Column)
+		default:
+			fmt.Printf("	%s  %s  `db:\"%s\"`\n", field.UpColumn, field.DataType, field.Column)
+		}
+	}
+	fmt.Printf(`}
+`)
+
+}
+
 func UpperFirst(s string) string {
 	byt := []byte(s)
 	firstChar := bytes.ToUpper([]byte{byt[0]})
@@ -110,6 +139,7 @@ func main() {
 	flag.StringVar(&sqlas, "as", "", "(Optional) name of the table Object   (default = same as SQL table name)")
 	flag.BoolVar(&html, "html", false, "Generate HTML ?")
 	flag.BoolVar(&form, "formly", false, "Generate ngFormly Defintiions ?")
+	flag.BoolVar(&gotype, "gotype", false, "Generate Go type declaration")
 	flag.Parse()
 
 	if dirname == "" {
@@ -137,6 +167,10 @@ func main() {
 
 	if form {
 		generateForm()
+	}
+
+	if gotype {
+		generateGoType()
 	}
 
 }
