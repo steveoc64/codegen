@@ -29,5 +29,5 @@ $ codegen [-out dirname] -t tablename [-html]
 
 The following HTML files will be generated into the output directrory :
 
-- <tablename>s.html 	List the contents of the SQL table in a LumX data_table
+- &lt;tablename&gt;s.html 	List the contents of the SQL table in a LumX data_table
 
