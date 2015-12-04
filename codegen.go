@@ -23,6 +23,8 @@ var (
 	DB         *runner.DB
 	dirname    string
 	dbname     string
+	sqltable   string
+	sqlas      string
 	tablename  string
 	Tablename  string
 	html       bool
@@ -70,7 +72,7 @@ func _initDB() {
 	DB.SQL(`
 	select column_name, data_type, character_maximum_length
 	from INFORMATION_SCHEMA.COLUMNS 
-	where table_name = $1`, tablename).QueryStructs(&schema)
+	where table_name = $1`, sqltable).QueryStructs(&schema)
 
 	for _, row := range schema {
 		row.UpColumn = UpperFirst(row.Column)
@@ -79,11 +81,12 @@ func _initDB() {
 
 func generateHTML() {
 
-	listFile := fmt.Sprintf("%s/%ss.html", dirname, tablename)
-	generateHTML_list(listFile)
+	generateHTML_list(fmt.Sprintf("%s/%ss.html", dirname, tablename))
+	generateHTML_edit(fmt.Sprintf("%s/%s.edit.html", dirname, tablename))
 }
 
 func UpperFirst(s string) string {
+	log.Println("Uppering", s)
 	byt := []byte(s)
 	firstChar := bytes.ToUpper([]byte{byt[0]})
 	rest := byt[1:]
@@ -92,20 +95,24 @@ func UpperFirst(s string) string {
 
 func main() {
 
-	flag.StringVar(&dirname, "out", "generated", "Directory to place generated code into")
-	flag.StringVar(&dbname, "d", "cmms", "Name of the database to connect to")
-	flag.StringVar(&tablename, "t", "", "Name of the table to use")
+	flag.StringVar(&dirname, "out", "generated", "(Optional) Directory to place generated code into")
+	flag.StringVar(&sqltable, "t", "", "Name of the SQL table to use")
+	flag.StringVar(&sqlas, "as", "", "(Optional) name of the table Object   (default = same as SQL table name)")
 	flag.BoolVar(&html, "html", false, "Generate HTML ?")
 	flag.Parse()
+
 	if dirname == "" {
 		log.Fatalln("Must define an output directory to place generated code into")
 	}
-	if dbname == "" {
-		log.Fatalln("No database defined")
-	}
-	if tablename == "" {
+
+	if sqltable == "" {
 		log.Fatalln("No table defined")
 	} else {
+		if sqlas == "" {
+			tablename = sqlas
+		} else {
+			tablename = sqltable
+		}
 		Tablename = UpperFirst(tablename)
 	}
 
