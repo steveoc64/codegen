@@ -32,6 +32,9 @@ var (
 	form         bool
 	gotype       bool
 	gorest       bool
+	routes       bool
+	controller   bool
+	theworks     bool
 	schema       []*DBSchema
 	column_list  []string
 	column_names string
@@ -114,7 +117,17 @@ func generateGoType() {
 
 func generateGoRest() {
 
-	generate_Go_REST(fmt.Sprintf("%s/rest_%s.go", dirname, tablename))
+	generate_Go_REST(fmt.Sprintf("%s/%s.go", dirname, tablename))
+}
+
+func generateRoutes() {
+
+	generate_Routes(fmt.Sprintf("%s/%s.routes.js", dirname, tablename))
+}
+
+func generateController() {
+
+	generate_Controller(fmt.Sprintf("%s/%s.go", dirname, tablename))
 }
 
 var camelingRegex = regexp.MustCompile("[0-9A-Za-z]+")
@@ -144,10 +157,13 @@ func main() {
 	flag.StringVar(&dirname, "out", "generated", "(Optional) Directory to place generated code into")
 	flag.StringVar(&sqltable, "t", "", "Name of the SQL table to use")
 	flag.StringVar(&sqlas, "as", "", "(Optional) name of the table Object   (default = same as SQL table name)")
+	flag.BoolVar(&gotype, "gotype", false, "Generate Go type declaration")
 	flag.BoolVar(&html, "html", false, "Generate HTML ?")
 	flag.BoolVar(&form, "formly", false, "Generate ngFormly Defintiions ?")
-	flag.BoolVar(&gotype, "gotype", false, "Generate Go type declaration")
-	flag.BoolVar(&gorest, "gorest", false, "Generate Go REST handlers for this table")
+	flag.BoolVar(&gorest, "go", false, "Generate Go REST handlers for this table")
+	flag.BoolVar(&routes, "routes", false, "Generate UI-Router routes for list/new/edit routes on this table")
+	flag.BoolVar(&controller, "controller", false, "Generate AngularJS controllers for this table")
+	flag.BoolVar(&theworks, "theworks", false, "Generate everything (html, routes, controller, go backend, formly forms")
 	flag.Parse()
 
 	if dirname == "" {
@@ -169,6 +185,14 @@ func main() {
 	// Create the generation dir if not already there, ignore errors
 	os.Mkdir(dirname, os.ModePerm)
 
+	if theworks {
+		controller = true
+		routes = true
+		gorest = true
+		form = true
+		html = true
+	}
+
 	if html {
 		generateHTML()
 	}
@@ -183,6 +207,14 @@ func main() {
 
 	if gorest {
 		generateGoRest()
+	}
+
+	if routes {
+		generateRoutes()
+	}
+
+	if controller {
+		generateController()
 	}
 
 }

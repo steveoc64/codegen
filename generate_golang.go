@@ -61,7 +61,7 @@ import (
 	str += generate_GoType()
 
 	str += fmt.Sprintf(`   
-func query%ss(c *echo.Context) error {
+func query%s(c *echo.Context) error {
 
   _, err := securityCheck(c, "read%s")
   if err != nil {
