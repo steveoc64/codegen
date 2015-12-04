@@ -44,6 +44,9 @@ The following super basic HTML files will be generated into the output directror
 - &lt;tablename&gt;.edit.html .....	Edit form for the SQL table
 - &lt;tablename&gt;.new.html ......	New record form for the SQL table
 
+	Example:  Generate HTML forms to manage List / Edit / New on the inventory table
+	$ codegen -t inventory -html
+
 ## Formly Definitions
 
 Run codegen with the -formly flag to generate a basic Formly layout in Javascript
