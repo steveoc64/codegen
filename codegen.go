@@ -38,7 +38,7 @@ type Today struct {
 
 func _initDB() {
 
-	db, err := sql.Open("postgres", fmt.Sprintf("user=postgres password=unx911zxx dbname=%s sslmode=disable", dbname))
+	db, err := sql.Open("postgres", Config.DataSourceName)
 	if err != nil {
 		fmt.Println("SQL Open", err.Error())
 	}

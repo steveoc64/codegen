@@ -9,10 +9,11 @@ Frontend generated code is in LumX  (angular 1 / bourbon / material design)
 
 ## Usage
 
-```
 required:  ~/config.json 
 	This is a JSON format file which must contain a field
 	DataSourceName:  which includes access information for your SQL database
+
+```
 
 $ codegen [-out dirname] -t tablename [-html]
 
