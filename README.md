@@ -3,9 +3,9 @@
 My own personal code generator for converting SQL structures into workable code
 for CRUD based apps.
 
-Backend generated code is in go
+Backend generated code is for Go, using the DAT toolkit to access the database, and echo webserver
 
-Frontend generated code is in LumX & ngFormly (angular 1 / bourbon / material design / formly forms)
+Frontend generated code is for LumX & ngFormly (angular 1 / bourbon / material design / formly forms)
 
 
 ## required:  ~/config.json 
@@ -29,7 +29,11 @@ $ codegen [-out dirname] -t tablename [-html]
 
 -gotype				(Optional) Generate Go typedef for this table
 
--gorest				(Optional) Generate Go REST endpoints for this table
+-gorest				(Optional) Generate REST endpoints for this table in Go
+
+-routes				(Optional) Generate ui-router routing table for this SQL table
+
+-controller			(Optional) Generate angular controller for List / Edit / New actions
 
 ```
 
@@ -38,7 +42,7 @@ $ codegen [-out dirname] -t tablename [-html]
 
 Run codegen with the -html flag to generate some basic HTML files
 
-The following super basic HTML files will be generated into the output directrory :
+The following HTML files will be generated into the output directrory :
 
 - &lt;tablename&gt;.list.html .....	List the contents of the SQL table in a LumX data_table
 - &lt;tablename&gt;.edit.html .....	Edit form for the SQL table
@@ -58,11 +62,14 @@ The following super basic HTML files will be generated into the output directror
 
 Run codegen with the -formly flag to generate a basic Formly layout in Javascript
 
-The following super basic JS files will be generated into the output directory :
+The following JS files will be generated into the output directory :
+
 
 - &lt;tablename&gt;.form.js .....	Define field input types, and create a function that creates a form
 
 ## Go Code Generation
 
 Run codegen with -gotype to generate a Go typedef to stdout
+
+Run codegen with -gorest to generate a set of REST functions to handle the usual CRUD ops
 

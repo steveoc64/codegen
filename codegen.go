@@ -9,6 +9,7 @@ import (
 	"gopkg.in/mgutz/dat.v1/sqlx-runner"
 	"log"
 	"os"
+	"regexp"
 	"time"
 )
 
@@ -20,18 +21,20 @@ type DBSchema struct {
 }
 
 var (
-	DB        *runner.DB
-	dirname   string
-	dbname    string
-	sqltable  string
-	sqlas     string
-	tablename string
-	Tablename string
-	html      bool
-	form      bool
-	gotype    bool
-	gorest    bool
-	schema    []*DBSchema
+	DB           *runner.DB
+	dirname      string
+	dbname       string
+	sqltable     string
+	sqlas        string
+	tablename    string
+	Tablename    string
+	html         bool
+	form         bool
+	gotype       bool
+	gorest       bool
+	schema       []*DBSchema
+	column_list  []string
+	column_names string
 )
 
 type Today struct {
@@ -78,8 +81,18 @@ func _initDB() {
 		fmt.Println("SQL Schema Query:", err.Error())
 	}
 
-	for _, row := range schema {
-		row.UpColumn = UpperFirst(row.Column)
+	column_names = ""
+	for i, row := range schema {
+		if row.Column == "id" {
+			row.UpColumn = "ID"
+		} else {
+			row.UpColumn = UpperFirst(row.Column)
+		}
+		column_list = append(column_list, row.Column)
+		if i > 0 {
+			column_names += ","
+		}
+		column_names += fmt.Sprintf("\"%s\"", row.Column)
 	}
 }
 
@@ -96,35 +109,29 @@ func generateForm() {
 
 func generateGoType() {
 
-	fmt.Printf(`
-typedef DB%s struct {
-`, Tablename)
+	fmt.Println(generate_GoType())
+}
 
-	for _, field := range schema {
-		switch field.DataType {
-		case "integer":
-			fmt.Printf("	%s  int  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		case "character varying":
-			fmt.Printf("	%s  string  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		case "text":
-			fmt.Printf("	%s  string  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		case "boolean":
-			fmt.Printf("	%s  bool  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		case "timestamp without time zone":
-			fmt.Printf("	%s  dat.NullDate  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		case "numeric":
-			fmt.Printf("	%s  float64  `db:\"%s\"`\n", field.UpColumn, field.Column)
-		default:
-			fmt.Printf("	%s  %s  `db:\"%s\"`\n", field.UpColumn, field.DataType, field.Column)
+func generateGoRest() {
+
+	generate_Go_REST(fmt.Sprintf("%s/rest_%s.go", dirname, tablename))
+}
+
+var camelingRegex = regexp.MustCompile("[0-9A-Za-z]+")
+
+func CamelCase(src string) string {
+	byteSrc := []byte(src)
+	chunks := camelingRegex.FindAll(byteSrc, -1)
+	for idx, val := range chunks {
+		if idx > 0 {
+			chunks[idx] = bytes.Title(val)
 		}
 	}
-	fmt.Printf(`}
-`)
-
+	return string(bytes.Join(chunks, nil))
 }
 
 func UpperFirst(s string) string {
-	byt := []byte(s)
+	byt := []byte(CamelCase(s))
 	firstChar := bytes.ToUpper([]byte{byt[0]})
 	rest := byt[1:]
 	return string(bytes.Join([][]byte{firstChar, rest}, nil))
@@ -140,6 +147,7 @@ func main() {
 	flag.BoolVar(&html, "html", false, "Generate HTML ?")
 	flag.BoolVar(&form, "formly", false, "Generate ngFormly Defintiions ?")
 	flag.BoolVar(&gotype, "gotype", false, "Generate Go type declaration")
+	flag.BoolVar(&gorest, "gorest", false, "Generate Go REST handlers for this table")
 	flag.Parse()
 
 	if dirname == "" {
@@ -171,6 +179,10 @@ func main() {
 
 	if gotype {
 		generateGoType()
+	}
+
+	if gorest {
+		generateGoRest()
 	}
 
 }
