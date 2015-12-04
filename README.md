@@ -44,7 +44,7 @@ The following super basic HTML files will be generated into the output directror
 - &lt;tablename&gt;.edit.html .....	Edit form for the SQL table
 - &lt;tablename&gt;.new.html ......	New record form for the SQL table
 
-`
+```
 	Example:  Generate HTML forms to manage List / Edit / New on the inventory table
 	$ codegen -t inventory -html
 	
@@ -52,7 +52,7 @@ The following super basic HTML files will be generated into the output directror
 	- generated/inventory.list.html
 	- generated/inventory.edit.html
 	- generated/inventory.new.html
-`
+```
 
 ## Formly Definitions
 
