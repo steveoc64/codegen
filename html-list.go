@@ -37,8 +37,8 @@ func generateHTML_list(listFile string) {
         </thead>
         <tbody>
           <tr class="data-table"
-              ng-class="Skills.logClass(l)"        
-              ng-repeat="l in Skills.getSelectedLogs()">
+              ng-class="%ss.logClass(l)"        
+              ng-repeat="l in %ss.getSelectedLogs()">
                 <td>{{l.Type}}</td>
                 <td>{{l.Logdate}}</td>
                 <td>{{l.Descr}}</td>
@@ -82,6 +82,7 @@ func generateHTML_list(listFile string) {
 `,
 		tablename,
 		Tablename,
+		Tablename, Tablename,
 		Tablename,
 		tablename, Tablename,
 		Tablename,

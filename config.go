@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"os/user"
 )
 
 // Runtime variables, held in external file config.json
 type ConfigType struct {
-	Debug          bool
 	DataSourceName string
 }
 
@@ -16,7 +16,14 @@ var Config ConfigType
 
 // Load the config.json file, and override with runtime flags
 func _loadConfig() {
-	cf, err := os.Open("~/codegen.json")
+
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	//fmt.Println(usr.HomeDir)
+
+	cf, err := os.Open(usr.HomeDir + "/codegen.json")
 	if err != nil {
 		log.Println("Could not open ~/codegen.json :", err.Error())
 	}

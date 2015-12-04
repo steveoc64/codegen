@@ -69,10 +69,14 @@ func _initDB() {
 		log.Fatalln(dbErr.Error())
 	}
 
-	DB.SQL(`
+	err = DB.SQL(`
 	select column_name, data_type, character_maximum_length
 	from INFORMATION_SCHEMA.COLUMNS 
 	where table_name = $1`, sqltable).QueryStructs(&schema)
+
+	if err != nil {
+		fmt.Println("SQL Schema Query:", err.Error())
+	}
 
 	for _, row := range schema {
 		row.UpColumn = UpperFirst(row.Column)
@@ -81,12 +85,12 @@ func _initDB() {
 
 func generateHTML() {
 
-	generateHTML_list(fmt.Sprintf("%s/%ss.html", dirname, tablename))
+	generateHTML_list(fmt.Sprintf("%s/%s.list.html", dirname, tablename))
 	generateHTML_edit(fmt.Sprintf("%s/%s.edit.html", dirname, tablename))
+	generateHTML_new(fmt.Sprintf("%s/%s.new.html", dirname, tablename))
 }
 
 func UpperFirst(s string) string {
-	log.Println("Uppering", s)
 	byt := []byte(s)
 	firstChar := bytes.ToUpper([]byte{byt[0]})
 	rest := byt[1:]
@@ -94,6 +98,8 @@ func UpperFirst(s string) string {
 }
 
 func main() {
+
+	_loadConfig()
 
 	flag.StringVar(&dirname, "out", "generated", "(Optional) Directory to place generated code into")
 	flag.StringVar(&sqltable, "t", "", "Name of the SQL table to use")
@@ -108,10 +114,9 @@ func main() {
 	if sqltable == "" {
 		log.Fatalln("No table defined")
 	} else {
-		if sqlas == "" {
+		tablename = sqltable
+		if sqlas != "" {
 			tablename = sqlas
-		} else {
-			tablename = sqltable
 		}
 		Tablename = UpperFirst(tablename)
 	}

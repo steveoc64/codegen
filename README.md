@@ -21,17 +21,19 @@ $ codegen [-out dirname] -t tablename [-html]
 -out dirname		Name of the directory to place generated code into (default = generated)
 
 -t tablename		Name of the SQL table to base the generated code on
--as 						Name of the Table in the generated code (default = same as tablename)
+-as 				(Optional) Name of the Table in the generated code (default = same as tablename)
 
--html  					Generate HTML
+-html  				(Optional) Generate HTML
 ```
 
 
 ## HTML Generation
 
+Run codegen with the -html flag to generate some basic HTML files
+
 The following super basic HTML files will be generated into the output directrory :
 
-- &lt;tablename&gt;s.html .......	List the contents of the SQL table in a LumX data_table
-- &lt;tablename&gt;.edit.html ...	Edit form for the SQL table
-- &lt;tablename&gt;.new.html ....	New record form for the SQL table
+- &lt;tablename&gt;.list.html .....	List the contents of the SQL table in a LumX data_table
+- &lt;tablename&gt;.edit.html .....	Edit form for the SQL table
+- &lt;tablename&gt;.new.html ......	New record form for the SQL table
 
