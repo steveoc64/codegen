@@ -128,7 +128,7 @@ func new%s(c *echo.Context) error {
   }
 
   err = DB.InsertInto("%s").
-    Whiltelist(%s).
+    Whitelist(%s).
     Record(record).
     Returning("id").
     QueryScalar(&record.ID)
