@@ -35,6 +35,7 @@ var (
 	routes       bool
 	controller   bool
 	theworks     bool
+	listtables   bool
 	schema       []*DBSchema
 	column_list  []string
 	column_names string
@@ -127,7 +128,7 @@ func generateRoutes() {
 
 func generateController() {
 
-	generate_Controller(fmt.Sprintf("%s/%s.go", dirname, tablename))
+	generate_Controller(fmt.Sprintf("%s/%s.js", dirname, tablename))
 }
 
 var camelingRegex = regexp.MustCompile("[0-9A-Za-z]+")
@@ -163,7 +164,8 @@ func main() {
 	flag.BoolVar(&gorest, "go", false, "Generate Go REST handlers for this table")
 	flag.BoolVar(&routes, "routes", false, "Generate UI-Router routes for list/new/edit routes on this table")
 	flag.BoolVar(&controller, "controller", false, "Generate AngularJS controllers for this table")
-	flag.BoolVar(&theworks, "theworks", false, "Generate everything (html, routes, controller, go backend, formly forms")
+	flag.BoolVar(&theworks, "all", false, "Generate everything (html, routes, controller, go backend, formly forms")
+	flag.BoolVar(&listtables, "l", false, "Just list the tables in the current database")
 	flag.Parse()
 
 	if dirname == "" {

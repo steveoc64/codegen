@@ -9,7 +9,7 @@ import (
 func generate_GoType() string {
 
 	str := fmt.Sprintf(`
-typedef DB%s struct {
+type DB%s struct {
 `, tablename)
 
 	for _, field := range schema {

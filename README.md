@@ -39,7 +39,7 @@ Partial Code Generators :
 
 OR
 
--theworks			Generate ALL of the above
+-all				Generate ALL of the above
 
 Link Table Generator :
 
