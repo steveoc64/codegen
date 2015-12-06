@@ -23,9 +23,15 @@ func _loadConfig() {
 	}
 	//fmt.Println(usr.HomeDir)
 
-	cf, err := os.Open(usr.HomeDir + "/codegen.json")
+	// look for codegen.json in the current directory before getting the
+	// generic one from the home directory
+
+	cf, err := os.Open("codegen.json")
 	if err != nil {
-		log.Println("Could not open ~/codegen.json :", err.Error())
+		cf, err = os.Open(usr.HomeDir + "/codegen.json")
+		if err != nil {
+			log.Println("Could not open ~/codegen.json :", err.Error())
+		}
 	}
 
 	data := json.NewDecoder(cf)

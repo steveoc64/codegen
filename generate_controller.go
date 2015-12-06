@@ -16,7 +16,6 @@ func generate_Controller(listFile string) {
 
 	str := ""
 
-
 	str += fmt.Sprintf(`
           .state('%s',{
             url: '/%s',
@@ -75,6 +74,7 @@ func generate_Controller(listFile string) {
 	f.Sync()
 }
 
+/*
 
 
 ;(function() {
@@ -83,10 +83,10 @@ func generate_Controller(listFile string) {
   var base = 'admin'
   var app = angular.module('cmms')
 
-  app.controller(base+'SitesCtrl', 
+  app.controller(base+'SitesCtrl',
     ['$state','sites','Session','LxDialogService','logs','LxNotificationService',
     function($state, sites, Session, LxDialogService, logs, LxNotificationService){
-  
+
     angular.extend(this, {
       sites: sites,
       session: Session,
@@ -99,7 +99,7 @@ func generate_Controller(listFile string) {
           this.sortDir = !this.sortDir
         }
         this.sortField = field
-      },    
+      },
       getClass: function(row) {
         if (row.selected) {
           return "data-table__selectable-row--is-selected"
@@ -159,10 +159,10 @@ func generate_Controller(listFile string) {
     })
   }])
 
-  app.controller(base+'NewSiteCtrl', 
+  app.controller(base+'NewSiteCtrl',
     ['$state','Session','DBSite','LxNotificationService','$window',
     function($state,Session,DBSite,LxNotificationService,$window){
-  
+
     angular.extend(this, {
       session: Session,
       site: new DBSite(),
@@ -171,7 +171,7 @@ func generate_Controller(listFile string) {
         if (this.form.$valid) {
           this.site.$insert(function(newsite) {
             $state.go(base+'.sites')
-          })          
+          })
         }
       },
       abort: function() {
@@ -182,10 +182,10 @@ func generate_Controller(listFile string) {
     })
   }])
 
-  app.controller(base+'EditSiteCtrl', 
+  app.controller(base+'EditSiteCtrl',
     ['$state','$stateParams','site','logs','Session','$window','users','$timeout','machines',
     function($state,$stateParams,site,logs,Session,$window,users,sites,$timeout,machines){
-  
+
     angular.extend(this, {
       session: Session,
       site: site,
@@ -193,7 +193,7 @@ func generate_Controller(listFile string) {
       users: users,
       machines: machines,
       logClass: logClass,
-      formFields: getSiteForm(),    
+      formFields: getSiteForm(),
       submit: function() {
         this.site._id = $stateParams.id
         if (angular.isDefined(this.site.ParentSite) && this.site.ParentSite) {
@@ -203,7 +203,7 @@ func generate_Controller(listFile string) {
         }
         this.site.$update(function(newsite) {
           $window.history.go(-1)
-        })          
+        })
       },
       abort: function() {
         $window.history.go(-1)
@@ -239,15 +239,10 @@ func generate_Controller(listFile string) {
             break
         } // switch
       },
-      
+
     })
-/*
-    var vm = this
-    $timeout(function() {
-      vm.site.ParentSite = vm.site.ParentSiteName     
-    }, 200);
-*/
 
   }])
 
 })();
+*/
